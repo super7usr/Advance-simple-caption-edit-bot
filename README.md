@@ -1,73 +1,160 @@
-<img src="https://telegra.ph/file/21a8e96b45cd6ac4d3da6.jpg" alt="logo" target="/blank">
+# Telegram Caption Bot
 
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
-<h1 align= center>Auto Caption Bot</h1>
-<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
+This is a Telegram bot based on the [super7usr/caption](https://github.com/super7usr/caption) repository. The bot automatically adds captions to media files (photos, videos, documents) sent in Telegram channels.
 
-<p align="center">💜 Thanks for Being Here 💜</p>
+## Features
 
-<p align='center'><b><li>This bot can edit the captions of the videos, audios, or documents when they are uploaded to the channel</b></p>
-<br>
+- Automatically adds captions to media in your Telegram channels
+- Supports customizing caption text with variables like `{file_name}`
+- Force subscription feature to ensure users subscribe to your channel
+- Admin broadcast capabilities to send messages to all bot users
+- Ultra-reliable 24/7 uptime with multi-layer keep-alive mechanism
+- Self-healing design with automatic recovery from crashes
 
-## <li> Deployment Methods
+## Configuration
 
-<details><summary>📌 Deploy to Koyeb </summary>
-  
-[![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=git&repository=github.com/RknDeveloper/Rkn-AutoCaptionBot&env[BOT_TOKEN]&env[API_ID]&env[API_HASH]&env[ADMIN]&env[DB_NAME]&env[DB_URI]&env[FORCE_SUB]&env[RKN_PIC]=https://graph.org/file/f6c15009bce07058f1edb.jpg&env[DEF_CAP]&run_command=python%20bot.py&branch=main&name=Rkn-AutoCaptionBot) 
-</details>
+The bot requires the following environment variables (already configured):
 
-<details><summary>📌 Deploy to Render </summary>
-  
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/RknDeveloper/Rkn-AutoCaptionBot)
+- `API_ID` and `API_HASH`: Telegram API credentials
+- `BOT_TOKEN`: Your Telegram bot token
+- `FORCE_SUB`: Username of the channel users must subscribe to
+- `DB_URL`: MongoDB connection string
+- `ADMIN`: Telegram user ID of the bot admin
 
-</details>
-  
-<details><summary>📌 Deploy to Heroku </summary>
-  
-<a href="https://heroku.com/deploy?template=https://github.com/RknDeveloper/Rkn-AutoCaptionBot"> <img src="https://img.shields.io/badge/Deploy%20To%20Heroku-black?style=for-the-badge&logo=heroku" width="220" height="38.45"></p></a>
-</details>
+## Usage Instructions
 
-<details><summary>📌 Deploy to Railway </summary>
-  
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/w7jSPk)
-</details>
+### Basic Commands
 
-## 🥰 Features
+1. `/start` - Start the bot and see basic information
+2. `/set_caption` - Set a custom caption for your media files
+3. `/del_caption` - Delete your custom caption 
+4. `/see_caption` - View your current caption
 
-* Channel Auto Caption Edit.
-* Set Caption support.
-* Force join for the user for use.
-* Supports Broadcasts.
-* Unlimited Channel Support.
-* Has a custom Start-up pic.
-* Force subscribe available.
-* Admin Command Available.
-* Deploy to Koyeb + Heroku + Railway + Render + Vps.
-* Developer Service 24x7. 🔥
+### For Admins
 
-## <li> Configs 
-* `BOT_TOKEN`  - Get Bot Token From @BotFather
-* `API_ID` - From my.telegram.org 
-* `API_HASH` - From my.telegram.org
-* `ADMIN` - AUTH Or Bot Controllers Id's Multiple Id Use Space To Split 
-* `DB_URL`  - Mongo Database URL From https://cloud.mongodb.com
-* `DB_NAME`  - Your Database Name From Mongodb. 
-* `FORCE_SUB` - Your Force Sub Channel Username Without @
-* `DEF_CAP` - Set Your Custom Caption (Without Using Any Commands) Exam.. `{filename}`
+1. `/users` - See the number of users who have used the bot
+2. `/broadcast` - Send a message to all users
+3. `/restart` - Restart the bot
 
-## Botfather Commands
+### Adding Captions to Media
+
+1. Add the bot as an administrator to your Telegram channel
+2. Ensure the bot has permission to post messages
+3. When media is posted in the channel, the bot will automatically add the configured caption
+
+### Custom Caption Variables
+
+You can use the following variables in your custom caption:
+- `{file_name}` - Original filename of the media
+- `{file_size}` - Size of the file
+- `{duration}` - Duration (for videos and audio)
+
+## Implementation Details
+
+This bot runs on Replit with an enhanced 24/7 uptime mechanism that:
+
+1. **Watchdog System**: Monitors the main process and restarts it if it crashes
+2. **Telegram Bot**: Processes messages and manages caption functionality
+3. **Web Server**: Provides an HTTP endpoint for keep-alive pings
+4. **Adaptive Keep-Alive**: Self-pinging system with fallback mechanisms and adaptive timing
+5. **Automatic Refresh**: Implements a 24-hour restart cycle to prevent memory leaks
+6. **Task Queue System**: Stores tasks when the bot is offline and processes them upon restart
+
+For detailed documentation on the reliability implementation, see the [KEEP_ALIVE.md](KEEP_ALIVE.md) file.
+For details on the enhanced reliability features, see the [ENHANCED_RELIABILITY.md](ENHANCED_RELIABILITY.md) file.
+
+## Task Queue System
+
+The bot implements a resilient task queue system that ensures no messages are lost even if the bot goes offline temporarily:
+
+### How It Works
+
+1. When the bot receives a message but cannot process it immediately (e.g., during restart), it's stored in MongoDB
+2. When the bot restarts, it automatically processes any pending tasks in the queue
+3. The task queue maintains three statuses for tasks: `pending`, `completed`, and `failed`
+4. The system includes detailed logging and error handling to track task processing
+
+### Task Queue Utilities
+
+Several utility scripts are provided to manage and monitor the task queue:
+
+1. **process_tasks_manually.py**: Process pending tasks manually with various options
+   ```
+   # Process all pending tasks
+   python process_tasks_manually.py
+   
+   # Display detailed task statistics
+   python process_tasks_manually.py --stats
+   
+   # Retry failed tasks
+   python process_tasks_manually.py --reset-failed
+   
+   # Clean up old completed tasks
+   python process_tasks_manually.py --clean
+   ```
+
+2. **task_queue_utility.py**: Provides various task queue management functions
+   ```
+   # Check current task queue status
+   python task_queue_utility.py check
+   
+   # Add a test task to the queue
+   python task_queue_utility.py add-test
+   
+   # Retry failed tasks
+   python task_queue_utility.py retry-failed
+   
+   # Clean up old completed tasks
+   python task_queue_utility.py clean
+   ```
+
+3. **force_task_processing.py**: Force process all pending tasks without waiting for the bot
+   ```
+   python force_task_processing.py
+   ```
+
+### Admin Commands for Task Queue
+
+Admins can use the following bot commands to manage the task queue:
+
+1. `/queue_status` - Display the current status of the task queue
+2. `/show_failed_tasks` - List recent failed tasks with their error messages
+
+## Troubleshooting
+
+If the bot stops responding:
+
+1. Check the Replit logs for any watchdog or error messages
+2. The system should automatically recover within 2-5 minutes in most cases
+3. If automatic recovery fails, restart the bot using the Replit "Run" button
+4. Verify your MongoDB database is operational
+5. Ensure all your environment variables and Telegram credentials are valid
+
+### Task Queue Troubleshooting
+
+If tasks are not being processed:
+
+1. Check the task queue status: `python task_queue_utility.py check`
+2. Manually process pending tasks: `python process_tasks_manually.py`
+3. Check for database connectivity issues
+4. Restart the bot system: `python fix_task_processing.py`
+5. View detailed logs: `cat task_processor.log` (if available)
+
+For deployment information, see the [DEPLOYMENT.md](DEPLOYMENT.md) file.
+
+## System Architecture
+
 ```
-start - Bᴏᴛ Aʟɪᴠᴇ Cʜᴇᴄᴋɪɴɢ
-set_caption - To Set Your Custom Caption (This Commands Works On Channels Only)
-del_caption - To Delete Your Custom Caption (This Commands Works On Channels Only)
-restart - Tᴏ Rᴇsᴛᴀʀᴛ Tʜᴇ Bᴏᴛ (Aᴅᴍɪɴ ᴏɴʟʏ)
-status - ᴄʜᴇᴄᴋ ʙᴏᴛ sᴛᴀᴛᴜs (ᴀᴅᴍɪɴ ᴏɴʟʏ)
-broadcast - sᴇɴᴅ ᴍᴀssᴀɢᴇ ᴛᴏ ᴀʟʟ ᴜsᴇʀs (ᴀᴅᴍɪɴ ᴏɴʟʏ)
+┌─────────────────┐         ┌─────────────────┐
+│    watchdog.py  │ monitors │     main.py     │
+│ (Process Monitor)├────────→│  (Bot Launcher) │
+└─────────────────┘         └────────┬────────┘
+                                     │ starts
+                                     ▼
+┌─────────────────┐         ┌─────────────────┐
+│   keep_alive.py │ pings   │     bot.py      │
+│ (Uptime Service)│◄────────┤  (Telegram Bot) │
+└─────────────────┘         └─────────────────┘
 ```
 
-## Support
-* [![Support](https://img.shields.io/static/v1?label=Support&message=Group&color=critical)](https://t.me/Rkn_Bots_Support)
-* [![Updates](https://img.shields.io/static/v1?label=Updates&message=Channel&color=critical)](https://t.me/Rkn_Bots)
-
-## Credits 
-* [![RknDeveloper](https://img.shields.io/static/v1?label=Rkn&message=Developer&color=critical)](https://t.me/RknDeveloper)
+For further assistance, contact the repository maintainer or open an issue on GitHub.
