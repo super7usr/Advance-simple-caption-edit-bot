@@ -21,7 +21,7 @@ class Bots(object):
     
     # database config ( required.. 😥)
     DB_NAME = os.environ.get("DB_NAME", "M0VIES_CHANNEL")     
-    DB_URL = os.environ.get("DB_URL", "mongodb+srv://Caption:1renish2@cluster0.t1z16.mongodb.net/cluster0?retryWrites=true&w=majority")
+    DB_URL = os.environ.get("DB_URL", "")
 
     # default caption 
     DEF_CAP = os.environ.get("DEF_CAP", "<b><a href='https//:t.me/M0VIES_CHANNEL'>{file_name} \n\nMain Telegram Channel: @M0VIES_CHANNEL</a></b>",
