@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Telegram Caption Bot - Commands Reference</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <style>
+        body {
+            background-color: #222;
+            color: white;
+        }
+        .command-card {
+            background-color: #2b2b2b;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .command-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .header-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+            color: #4caf50;
+        }
+        .btn-action {
+            margin-right: 10px;
+            transition: transform 0.2s;
+        }
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+        .card {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .card-header {
+            background-color: #1e1e1e;
+            border-bottom: 2px solid #2d2d2d;
+        }
+        .command-name {
+            color: #4caf50;
+            font-family: monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .command-example {
+            background-color: #1e1e1e;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin-top: 10px;
+            color: #ff9800;
+        }
+    </style>
+</head>
+<body data-bs-theme="dark">
+    <div class="container py-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">Bot Commands Reference</h1>
+                <span class="badge bg-info">Reference Guide</span>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="header-icon">📚</div>
+                    <div>
+                        <h4 class="mb-0">Available Bot Commands</h4>
+                        <p class="text-muted mb-0">Use these commands when chatting with @Elizabeth_Olsen_robot</p>
+                    </div>
+                </div>
+                
+                <div class="alert alert-primary">
+                    <div class="d-flex align-items-center">
+                        <span style="font-size: 1.5rem; margin-right: 10px;">💡</span>
+                        <div>
+                            <h5 class="mb-1">Usage Tips</h5>
+                            <p class="mb-0">All commands should be sent directly to the bot in a private chat or as a reply in your channel. Use <code>{file_name}</code> as a placeholder in your captions to include the original file name.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    {% for command in commands %}
+                    <div class="command-card">
+                        <h5 class="command-name">{{ command.name }}</h5>
+                        <p>{{ command.description }}</p>
+                        <div class="command-example">Example: {{ command.example }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="alert alert-success mt-4">
+                    <div class="d-flex align-items-center">
+                        <span style="font-size: 1.5rem; margin-right: 10px;">🔍</span>
+                        <div>
+                            <h5 class="mb-1">Need More Help?</h5>
+                            <p class="mb-0">You can always use the <code>/help</code> command when chatting with the bot to get context-specific guidance.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <a href="/" class="btn btn-primary btn-action">
+                        <span style="margin-right: 5px;">🏠</span> Back to Dashboard
+                    </a>
+                    <a href="/status" class="btn btn-info btn-action">
+                        <span style="margin-right: 5px;">📊</span> Server Status
+                    </a>
+                </div>
+            </div>
+            <div class="card-footer text-center text-muted">
+                <small>Telegram Caption Bot Web Interface v1.0</small>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

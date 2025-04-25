@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Telegram Caption Bot - Server Status</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <style>
+        body {
+            background-color: #222;
+            color: white;
+        }
+        .status-card {
+            background-color: #2b2b2b;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+        }
+        .header-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body data-bs-theme="dark">
+    <div class="container py-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">Server Status</h1>
+                <span class="badge bg-success">Online</span>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="header-icon">📊</div>
+                    <div>
+                        <h4 class="mb-0">System Status</h4>
+                        <p class="text-muted mb-0">Telegram Caption Bot</p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="status-card">
+                            <h5>Web Server</h5>
+                            <span class="badge bg-success">{{ stats.web_server }}</span>
+                            <p class="mt-2 mb-0 text-muted">Flask web server running on port 5000</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="status-card">
+                            <h5>Bot Status</h5>
+                            {% if stats.bot_status == "Running" %}
+                                <span class="badge bg-success">{{ stats.bot_status }}</span>
+                            {% else %}
+                                <span class="badge bg-warning">{{ stats.bot_status }}</span>
+                            {% endif %}
+                            <p class="mt-2 mb-0 text-muted">@Elizabeth_Olsen_robot</p>
+                            {% if stats.bot_id %}
+                                <p class="mb-0 text-muted small">Bot ID: {{ stats.bot_id }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="status-card mt-4">
+                    <h5>System Information</h5>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p><strong>Uptime:</strong> {{ stats.uptime }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p><strong>Environment:</strong> Replit</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p><strong>Web UI:</strong> Active</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p><strong>Users:</strong> 
+                            {% if stats.total_users is defined %}
+                                {{ stats.total_users }}
+                            {% else %}
+                                Loading...
+                            {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if stats.recent_failed_tasks is defined and stats.recent_failed_tasks|length > 0 %}
+                <div class="status-card mt-4">
+                    <h5>Recent Task Failures</h5>
+                    <table class="table table-dark table-striped">
+                        <thead>
+                            <tr>
+                                <th>Task Type</th>
+                                <th>Error</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in stats.recent_failed_tasks %}
+                            <tr>
+                                <td>{{ task.task_type }}</td>
+                                <td>{{ task.error_message }}</td>
+                                <td>{{ task.created_at }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+                
+                <div class="alert alert-info mt-4">
+                    <h5>Recently Added Features</h5>
+                    <ul class="mb-0">
+                        <li><strong>✓ All Command</strong>: Process all media messages in a channel with one command</li>
+                        <li><strong>✓ Caption Templates</strong>: Save and reuse frequently used caption formats</li>
+                        <li><strong>✓ Smart FloodWait Handling</strong>: Better management of Telegram rate limits</li>
+                        <li><strong>✓ Web Interface</strong>: Monitor and control the bot through a web dashboard</li>
+                    </ul>
+                </div>
+                
+                <div class="mt-4">
+                    <a href="/" class="btn btn-primary btn-action">
+                        <span style="margin-right: 5px;">🏠</span> Back to Dashboard
+                    </a>
+                    <a href="/commands" class="btn btn-success btn-action">
+                        <span style="margin-right: 5px;">📚</span> Bot Commands
+                    </a>
+                    <a href="/health" class="btn btn-info btn-action">
+                        <span style="margin-right: 5px;">🔍</span> Health Check
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
