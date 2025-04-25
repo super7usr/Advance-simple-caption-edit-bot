@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Telegram Caption Bot</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Telegram Caption Bot for managing media captions in channels">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <style>
+        body {
+            background-color: #222;
+            color: white;
+        }
+        .feature-card {
+            background-color: #2b2b2b;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .header-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+            color: #4caf50;
+        }
+        .btn-action {
+            margin-right: 10px;
+            transition: transform 0.2s;
+        }
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+        .card {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .card-header {
+            background-color: #1e1e1e;
+            border-bottom: 2px solid #2d2d2d;
+        }
+        .badge {
+            padding: 8px 12px;
+            font-size: 0.9rem;
+        }
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+            color: #4caf50;
+        }
+    </style>
+</head>
+<body data-bs-theme="dark">
+    <div class="container py-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">Telegram Caption Bot</h1>
+                <span class="badge bg-success">Web UI Online</span>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="header-icon">🤖</div>
+                    <div>
+                        <h4 class="mb-0">Caption Management Bot</h4>
+                        <p class="text-muted mb-0">@Elizabeth_Olsen_robot</p>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info">
+                    <div class="d-flex align-items-center">
+                        <span style="font-size: 1.5rem; margin-right: 10px;">ℹ️</span>
+                        <div>
+                            <h5 class="mb-1">Cloudflare Pages Version</h5>
+                            <p class="mb-0">This is a static version of the web interface hosted on Cloudflare Pages.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4 class="mt-4 d-flex align-items-center">
+                    <span class="feature-icon">⚙️</span> Bot Features
+                </h4>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <h5><span class="feature-icon">✓</span> Caption Management</h5>
+                            <p>Set and manage captions for your media files with customizable formatting</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <h5><span class="feature-icon">✓</span> Batch Processing</h5>
+                            <p>Process all media captions in a channel with a single command</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <h5><span class="feature-icon">✓</span> Caption Templates</h5>
+                            <p>Save and reuse caption templates with placeholders for efficient workflow</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <h5><span class="feature-icon">✓</span> Smart Error Handling</h5>
+                            <p>Intelligent handling of Telegram rate limits with automatic retries</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4 p-3 bg-dark">
+                    <h5 class="d-flex align-items-center">
+                        <span class="feature-icon">🚀</span> Quick Start
+                    </h5>
+                    <p>To use the bot, start a conversation with <a href="https://t.me/Elizabeth_Olsen_robot" target="_blank">@Elizabeth_Olsen_robot</a> on Telegram and use these commands:</p>
+                    <ul>
+                        <li><code>/start</code> - Start the bot and get welcome message</li>
+                        <li><code>/help</code> - Get a list of available commands</li>
+                        <li><code>/setcaption &lt;caption text&gt;</code> - Set a new caption for your media</li>
+                    </ul>
+                </div>
+                
+                <div class="mt-4">
+                    <a href="status.html" class="btn btn-info btn-action">
+                        <span style="margin-right: 5px;">📊</span> Server Status
+                    </a>
+                    <a href="commands.html" class="btn btn-success btn-action">
+                        <span style="margin-right: 5px;">📚</span> Bot Commands
+                    </a>
+                </div>
+            </div>
+            <div class="card-footer text-center text-muted">
+                <small>Telegram Caption Bot Web Interface v1.0</small>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

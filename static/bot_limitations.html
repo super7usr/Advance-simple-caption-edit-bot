@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Telegram Bot Limitations - Caption Bot</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <style>
+        body {
+            background-color: #222;
+            color: white;
+        }
+        .limitation-card {
+            background-color: #2b2b2b;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-left: 4px solid #dc3545;
+        }
+        .workaround-card {
+            background-color: #2b2b2b;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+        }
+        .header-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+            color: #dc3545;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .card-header {
+            background-color: #1e1e1e;
+            border-bottom: 2px solid #2d2d2d;
+        }
+    </style>
+</head>
+<body data-bs-theme="dark">
+    <div class="container py-4">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="h3 mb-0">Telegram Bot API Limitations</h1>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="header-icon">⚠️</div>
+                    <div>
+                        <h4 class="mb-0">Understanding Bot Limitations</h4>
+                        <p class="text-muted mb-0">Important information for Caption Bot users</p>
+                    </div>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <strong>Important:</strong> Due to Telegram's Bot API restrictions, certain functionality is limited compared to user accounts.
+                </div>
+                
+                <h5 class="mt-4">Key Limitations</h5>
+                
+                <div class="limitation-card">
+                    <h6>❌ Cannot Access Message History</h6>
+                    <p>Bots cannot use <code>messages.GetHistory</code> to retrieve past messages in a channel or chat.</p>
+                </div>
+                
+                <div class="limitation-card">
+                    <h6>❌ Limited Media Access</h6>
+                    <p>Bots can only interact with media that is explicitly forwarded to them or sent while they're active.</p>
+                </div>
+                
+                <div class="limitation-card">
+                    <h6>❌ No Automatic Caption Processing</h6>
+                    <p>Bots cannot automatically process all media in a channel without user interaction.</p>
+                </div>
+                
+                <h5 class="mt-4">Effective Workarounds</h5>
+                
+                <div class="workaround-card">
+                    <h6>✅ Use Forward Method</h6>
+                    <p>Forward individual messages to the bot for caption processing, then forward them back to your channel.</p>
+                </div>
+                
+                <div class="workaround-card">
+                    <h6>✅ Set Default Caption Template</h6>
+                    <p>Use <code>/setcaption</code> to set a default caption template that will be applied to all new media.</p>
+                </div>
+                
+                <div class="workaround-card">
+                    <h6>✅ Save Templates for Consistency</h6>
+                    <p>Create and save multiple caption templates using <code>/save_template</code> for different content types.</p>
+                </div>
+                
+                <div class="workaround-card">
+                    <h6>✅ Add as Admin</h6>
+                    <p>Add the bot as an administrator to your channel for real-time caption processing of new media.</p>
+                </div>
+                
+                <div class="mt-4">
+                    <a href="/" class="btn btn-primary">Back to Home</a>
+                    <a href="/commands.html" class="btn btn-success ms-2">View Commands</a>
+                </div>
+            </div>
+            <div class="card-footer text-center text-muted">
+                <small>Telegram Caption Bot Documentation</small>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

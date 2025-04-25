@@ -1,0 +1,4 @@
+# Redirects for Cloudflare Pages
+# This ensures that all routes are handled by the application
+
+/* /:splat 200

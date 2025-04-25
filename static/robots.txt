@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tg-caption-bot.pages.dev/sitemap.xml

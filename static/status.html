@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Server Status - Telegram Caption Bot</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Server status page for the Telegram Caption Bot">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <style>
+        body {
+            background-color: #222;
+            color: white;
+        }
+        .status-card {
+            background-color: #2b2b2b;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .status-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .header-icon {
+            font-size: 2.5rem;
+            margin-right: 15px;
+            color: #4caf50;
+        }
+        .btn-action {
+            margin-right: 10px;
+            transition: transform 0.2s;
+        }
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+        .card {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .card-header {
+            background-color: #1e1e1e;
+            border-bottom: 2px solid #2d2d2d;
+        }
+        .status-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        .status-online {
+            color: #4caf50;
+        }
+        .status-offline {
+            color: #f44336;
+        }
+        .status-warning {
+            color: #ff9800;
+        }
+    </style>
+</head>
+<body data-bs-theme="dark">
+    <div class="container py-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h1 class="h3 mb-0">Server Status</h1>
+                <span class="badge bg-info">System Info</span>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="header-icon">📊</div>
+                    <div>
+                        <h4 class="mb-0">System Status Dashboard</h4>
+                        <p class="text-muted mb-0">Current system information and statistics</p>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="status-card">
+                            <h5 class="d-flex align-items-center">
+                                <span class="status-icon status-online">●</span> Web Server
+                            </h5>
+                            <p>Status: <span class="badge bg-success">Online</span></p>
+                            <p>Platform: Cloudflare Pages</p>
+                            <p>Last Updated: <span id="current-date">April 24, 2025</span></p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="status-card">
+                            <h5 class="d-flex align-items-center">
+                                <span class="status-icon status-offline">●</span> Telegram Bot
+                            </h5>
+                            <p>Status: <span class="badge bg-secondary">Offline</span> (Static UI Mode)</p>
+                            <p>Bot Username: @Elizabeth_Olsen_robot</p>
+                            <p>Visit the bot on <a href="https://t.me/Elizabeth_Olsen_robot" target="_blank">Telegram</a> to check actual status</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="status-card mt-3">
+                    <h5 class="d-flex align-items-center">
+                        <span class="status-icon status-warning">●</span> System Resources
+                    </h5>
+                    <p>Static deployment on Cloudflare Pages</p>
+                    <p>For dynamic resources, please use the Replit server version</p>
+                </div>
+                
+                <div class="alert alert-info mt-3">
+                    <div class="d-flex align-items-center">
+                        <span style="font-size: 1.5rem; margin-right: 10px;">ℹ️</span>
+                        <div>
+                            <h5 class="mb-1">Static Deployment Notice</h5>
+                            <p class="mb-0">This is a static version hosted on Cloudflare Pages. For real-time status updates, please use the dynamic version on Replit.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <a href="index.html" class="btn btn-primary btn-action">
+                        <span style="margin-right: 5px;">🏠</span> Back to Home
+                    </a>
+                    <a href="commands.html" class="btn btn-success btn-action">
+                        <span style="margin-right: 5px;">📚</span> Bot Commands
+                    </a>
+                </div>
+            </div>
+            <div class="card-footer text-center text-muted">
+                <small>Telegram Caption Bot Status Dashboard</small>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Update current date
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    </script>
+</body>
+</html>
