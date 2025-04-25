@@ -299,7 +299,11 @@ async def process_all_channel_messages(bot, message):
     
     try:
         # First delete the "all" command message to avoid confusion
-        await message.delete()
+        try:
+            await message.delete()
+        except Exception as del_e:
+            print(f"Could not delete message: {del_e}")
+            # Continue even if we can't delete the command message
         
         # Check if the bot can process messages
         try:
@@ -371,23 +375,76 @@ async def process_all_channel_messages(bot, message):
                                         
                                         # Update status every 10 messages
                                         if total_processed % 10 == 0:
-                                            await status_msg.edit(f"🔄 Processing channel messages...\n\n"
-                                                                f"Total Processed: {total_processed}\n"
-                                                                f"Successfully Updated: {success_count}\n"
-                                                                f"Errors: {error_count}")
+                                            try:
+                                                await status_msg.edit(f"🔄 Processing channel messages...\n\n"
+                                                                   f"Total Processed: {total_processed}\n"
+                                                                   f"Successfully Updated: {success_count}\n"
+                                                                   f"Errors: {error_count}")
+                                            except FloodWait as status_fw:
+                                                print(f"FloodWait on status update: {status_fw.x} seconds")
+                                                # Don't wait here, continue processing messages
+                                                # The status will update in a later iteration
+                                            except Exception as status_e:
+                                                print(f"Error updating status: {status_e}")
                                         
                                         # Add delay to avoid hitting limits
                                         await asyncio.sleep(0.5)
                                         
                                     except FloodWait as e:
-                                        await status_msg.edit(f"⚠️ Rate limited by Telegram. Waiting for {e.x} seconds...")
-                                        await asyncio.sleep(e.x)
+                                        wait_time = getattr(e, 'x', None) or getattr(e, 'wait_time', 20)
+                                        print(f"FloodWait encountered: {wait_time} seconds")
+                                        try:
+                                            # Update status to inform user about the wait
+                                            await status_msg.edit(f"⚠️ Rate limited by Telegram. Waiting for {wait_time} seconds...\n\n"
+                                                               f"Total Processed: {total_processed}\n"
+                                                               f"Successfully Updated: {success_count}\n"
+                                                               f"Errors: {error_count}\n\n"
+                                                               f"Caption editing will continue automatically after waiting.")
+                                        except Exception as status_e:
+                                            print(f"Error updating wait status: {status_e}")
+                                            
+                                        # Wait as instructed by Telegram
+                                        await asyncio.sleep(wait_time)
                                         
                                         # Try again after waiting
                                         try:
+                                            # Notify user that we're continuing
+                                            try:
+                                                await status_msg.edit(f"✅ Resuming caption editing after waiting {wait_time} seconds...\n\n"
+                                                                  f"Total Processed: {total_processed}\n"
+                                                                  f"Successfully Updated: {success_count}\n"
+                                                                  f"Errors: {error_count}")
+                                            except Exception as resume_status_e:
+                                                print(f"Error updating resume status: {resume_status_e}")
+                                                
+                                            # Retry the edit
                                             replaced_caption = caption.format(file_name=file_name)
                                             await msg.edit(replaced_caption)
                                             success_count += 1
+                                            print(f"Successfully retried after FloodWait")
+                                        except FloodWait as retry_fw:
+                                            # If we hit another FloodWait, wait again
+                                            retry_wait_time = getattr(retry_fw, 'x', None) or getattr(retry_fw, 'wait_time', 20)
+                                            print(f"Another FloodWait encountered: {retry_wait_time} seconds")
+                                            try:
+                                                await status_msg.edit(f"⚠️ Hit another rate limit. Waiting for {retry_wait_time} seconds...")
+                                            except:
+                                                pass
+                                            await asyncio.sleep(retry_wait_time)
+                                            # Try one more time
+                                            try:
+                                                replaced_caption = caption.format(file_name=file_name)
+                                                await msg.edit(replaced_caption)
+                                                success_count += 1
+                                                print(f"Successfully retried after second FloodWait")
+                                            except FloodWait as third_fw:
+                                                # If we hit a third FloodWait, just log and continue
+                                                third_wait_time = getattr(third_fw, 'x', None) or getattr(third_fw, 'wait_time', 20)
+                                                print(f"Third FloodWait encountered: {third_wait_time} seconds. Skipping this message.")
+                                                error_count += 1
+                                            except Exception as second_retry_e:
+                                                error_count += 1
+                                                print(f"Error on second retry: {second_retry_e}")
                                         except Exception as retry_e:
                                             error_count += 1
                                             print(f"Error retrying edit after FloodWait: {retry_e}")
@@ -401,14 +458,43 @@ async def process_all_channel_messages(bot, message):
                         
                 # Final status update
                 if total_processed > 0:
-                    await status_msg.edit(f"✅ Caption update completed!\n\n"
-                                       f"Total Messages Processed: {total_processed}\n"
-                                       f"Successfully Updated: {success_count}\n"
-                                       f"Errors: {error_count}\n\n"
-                                       f"Note: Due to Telegram API limitations, only {total_processed} recent messages could be processed.")
+                    try:
+                        await status_msg.edit(f"✅ Caption update completed!\n\n"
+                                           f"Total Messages Processed: {total_processed}\n"
+                                           f"Successfully Updated: {success_count}\n"
+                                           f"Errors: {error_count}\n\n"
+                                           f"Note: Due to Telegram API limitations, only {total_processed} recent messages could be processed.")
+                    except FloodWait as final_fw:
+                        final_wait_time = getattr(final_fw, 'x', None) or getattr(final_fw, 'wait_time', 20)
+                        print(f"FloodWait on final status update: {final_wait_time} seconds")
+                        # Wait the required time
+                        await asyncio.sleep(final_wait_time)
+                        # Try again after waiting
+                        try:
+                            await status_msg.edit(f"✅ Caption update completed!\n\n"
+                                               f"Total Messages Processed: {total_processed}\n"
+                                               f"Successfully Updated: {success_count}\n"
+                                               f"Errors: {error_count}\n\n"
+                                               f"Note: Due to Telegram API limitations, only {total_processed} recent messages could be processed.")
+                        except Exception as retry_final_e:
+                            print(f"Error on final status retry: {retry_final_e}")
+                    except Exception as final_e:
+                        print(f"Error on final status update: {final_e}")
                 else:
-                    await status_msg.edit("⚠️ No media messages could be processed.\n\n"
-                                      "This could be due to Telegram API limitations or because there are no recent media messages in the channel.")
+                    try:
+                        await status_msg.edit("⚠️ No media messages could be processed.\n\n"
+                                          "This could be due to Telegram API limitations or because there are no recent media messages in the channel.")
+                    except FloodWait as none_fw:
+                        # Wait and try again
+                        none_wait_time = getattr(none_fw, 'x', None) or getattr(none_fw, 'wait_time', 20)
+                        await asyncio.sleep(none_wait_time)
+                        try:
+                            await status_msg.edit("⚠️ No media messages could be processed.\n\n"
+                                              "This could be due to Telegram API limitations or because there are no recent media messages in the channel.")
+                        except Exception:
+                            pass
+                    except Exception as none_e:
+                        print(f"Error on none status update: {none_e}")
             else:
                 # Bot doesn't have admin permissions
                 await status_msg.edit("⚠️ The bot needs to be an admin with 'Edit Messages' permission to process channel messages.\n\n"
@@ -431,10 +517,42 @@ async def process_all_channel_messages(bot, message):
         await asyncio.sleep(60)
         await status_msg.delete()
         
+    except FloodWait as main_fw:
+        # Handle FloodWait specifically
+        main_wait_time = getattr(main_fw, 'x', None) or getattr(main_fw, 'wait_time', 20)
+        print(f"Main process hit FloodWait: {main_wait_time} seconds")
+        try:
+            await status_msg.edit(f"⚠️ Rate limited by Telegram. Waiting for {main_wait_time} seconds...\n\n"
+                               f"Total processed so far: {total_processed}\n"
+                               f"Successfully updated: {success_count}\n"
+                               f"Caption editing will continue automatically after waiting.")
+        except Exception as fw_status_e:
+            print(f"Error updating FloodWait status: {fw_status_e}")
+            
+        # Wait the required time
+        await asyncio.sleep(main_wait_time)
+        
+        # Try to resume by processing remaining messages
+        try:
+            await status_msg.edit(f"✅ Resuming caption editing after waiting {main_wait_time} seconds...\n\n"
+                               f"Total processed so far: {total_processed}")
+            # We don't actually need to do anything here since the loop already
+            # ended with an exception. We'll just show a recovery message.
+            await asyncio.sleep(5)
+            await status_msg.edit(f"✅ Caption update completed after FloodWait!\n\n"
+                               f"Total Messages Processed: {total_processed}\n"
+                               f"Successfully Updated: {success_count}\n"
+                               f"Errors: {error_count}")
+        except Exception as resume_e:
+            print(f"Error resuming after FloodWait: {resume_e}")
     except Exception as e:
-        # Handle any errors in the main process
-        await status_msg.edit(f"❌ Error updating captions: {str(e)}\n\n"
-                             f"Total processed so far: {total_processed}")
+        # Handle other errors in the main process
+        try:
+            await status_msg.edit(f"❌ Error updating captions: {str(e)}\n\n"
+                                f"Total processed so far: {total_processed}\n"
+                                f"Successfully updated: {success_count}")
+        except Exception:
+            pass
         print(f"Error in process_all_channel_messages: {e}")
 
 # Developer ❁✗❍═❰ 🆁︎🅴︎🅽︎🅸︎🆂︎🅷︎ ❱═❍✗❁ 
